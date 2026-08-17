@@ -1,13 +1,14 @@
-TITLE -- Concurrent System Monitoring Tool
+# Concurrent System Monitoring Tool
 
-1.  Metadata
-    Author: Kobe Chui
-    Date Created: April 5, 2025
+1.  ### Metadata
+    - Author: Kobe Chui
+    - Date Created: April 5, 2025
 
-2.  Introduction
+2.  ### Introduction
+
     This projecct attempts to redesign the system monitoring tool and implement concurrency and signal handling features. The system monitoring tool provides informaiton over specific period of time for certain sampling size including memory usuage, CPU utilization, number of cores in the CPU, and the maximum frequency among given cores.
 
-3.  How I solved the problem
+4.  ### How I solved the problem
     -   I utilized my understanding in concurrency between processes and communication between processes, as well as signals handling for this project.
     -   I utilized a CLA parsing algorithm with custom flags and initialized variables within a flag structure.
     -   Since this project involve processing and communication between parent and child processes, I chose myMonitoringTool.c as the parent process and the main() function inside is the driver to instruct what information is needed for retrieval from the child process.
@@ -16,7 +17,8 @@ TITLE -- Concurrent System Monitoring Tool
     -   For signal handling, signal_handler.c is responsible for responding to signal input from users, blocking SIGTSTP and SIGINT using 
     sigaction(). Global variable pause_requested was used to change signals between modules.
     
-4.  Implementation
+5.  ### Implementation
+
     My code is divided into 4 parts: the driver program - myMonitoringTool.c with process.c handling child processes; data retrieval programs - memory.c, cpu.c, and core.c; graphing program - graph.c along with miscellanenous functions in utilities.c; signal handling program - signal_handler.c; Lastly CLA parser - parse_command_line.c
     Header files are used to connect them, including process.h, memory.h, cpu.h, core.h, graph.h, utilities.h, signal_handler.h, and parse_command_line.h respectively.
     
@@ -202,10 +204,10 @@ TITLE -- Concurrent System Monitoring Tool
     void setup_signal_handlers();
     ```
 
-5.  Flow chart
+7.  ### Flow chart
     ![Flow Chart](flowchart.png)
 
-6.  Instructions to compile my code
+8.  ### Instructions to compile my code
     $ make
 
     Run "$ make help" to see documentations
@@ -217,7 +219,8 @@ TITLE -- Concurrent System Monitoring Tool
     Please run the executables with the following CLA syntax: ./myMonitoringTool [samples [tdelay]] [--memory] [--cpu] [--cores] [--samples=N] [--tdelay=T]
     Where [samples [tdelay]] are the positional arguments that must appear before any flags. They should be integers which goes the same with N and T in [--samples=N] [--tdelay=T]. Note that [samples] must come before [tdelay], so there only exists one positional argument, it is considered as an argument for [samples].
 
-7.  Expected results
+9.  ### Expected results
+```bash
 $ ./myMonitoringTool
 Number of Samples: 20 -- every 500000 microsecs (0.500 secs)
 
@@ -349,8 +352,9 @@ Number of Cores: 20 @ 4.80 GHz
 +--+ +--+ +--+ +--+
 |  | |  | |  | |  |
 +--+ +--+ +--+ +--+
+```
 
-8.  Test Cases
+8.  ### Test Cases
     - Any CLA that does not match with the one mentioned in Section 6 will be treated as an error, an error messages should be printed.
     - Order and repetition of flags do not matter,except positional arguments.
     - For [samples=N] and [tdelay=T], both N and T must be integers otherwise an error message will be printed.
@@ -361,13 +365,13 @@ Number of Cores: 20 @ 4.80 GHz
       (Ex. ./myMontioringTool 50 1 --samples=10 --tdelay=200000 will set samples to 10 and tdelay to 200000)
     - When the program is paused by pressing CTRL + C and a prompt appears, anything other than 'Y' (or 'y') and 'N' (or 'n') will be considered invalid.
 
-9.  Disclaimers
+9.  ### Disclaimers
     - If any files cannot be opened, such as /proc/stat or /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq, the program including all child processes will be immediately terminated.
     - Please make sure there is sufficient memory in the system for forking mulitple processes.
     - When an error occurs in any process, all processes will be terminated including the main parent program. 
     - Please ensure the terminal window is maximized, otherwise the program may produce dissorted graphs. 
 
-10. References
+10. ### References
     -   https://man7.org/linux/man-pages/man2/sigaction.2.html
     -   https://man7.org/linux/man-pages/man3/usleep.3.html
     -   https://man7.org/linux/man-pages/man2/sigaction.2.html
